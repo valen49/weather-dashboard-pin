@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     bucket         = "pin-terraform-state-506581103804"
-    key            = "pin/terraform.tfstate"
+    key            = "pin/weather-dashboard-pin/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "pin-terraform-locks"
     encrypt        = true
