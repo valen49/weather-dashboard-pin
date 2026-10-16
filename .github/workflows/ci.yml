@@ -59,7 +59,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=valen49
-            -Dsonar.projectKey=valen49_weather-dashboard
+            -Dsonar.projectKey=valen49_weather-dashboard-pin
             -Dsonar.sources=app
             -Dsonar.tests=tests
             -Dsonar.exclusions=node_modules/**,e2e/**,playwright-report/**
@@ -139,13 +139,13 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/valen49/weather-dashboard:latest
-            ghcr.io/valen49/weather-dashboard:${{ github.sha }}
+            ghcr.io/valen49/weather-dashboard-pin:latest
+            ghcr.io/valen49/weather-dashboard-pin:${{ github.sha }}
 
       - name: Generate SBOM (CycloneDX)
         uses: anchore/sbom-action@v0
         with:
-          image: ghcr.io/valen49/weather-dashboard:${{ github.sha }}
+          image: ghcr.io/valen49/weather-dashboard-pin:${{ github.sha }}
           format: cyclonedx-json
           output-file: sbom.cyclonedx.json
           upload-artifact: false
@@ -164,10 +164,10 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker pull ghcr.io/valen49/weather-dashboard:latest
+            docker pull ghcr.io/valen49/weather-dashboard-pin:latest
             docker stop weather-dashboard || true
             docker rm weather-dashboard || true
-            docker run -d --name weather-dashboard -p 5000:5000 --restart unless-stopped ghcr.io/valen49/weather-dashboard:latest
+            docker run -d --name weather-dashboard -p 5000:5000 --restart unless-stopped ghcr.io/valen49/weather-dashboard-pin:latest
             for i in 1 2 3 4 5; do
               if curl -sf http://localhost:5000/health; then
                 echo "Health check OK"
