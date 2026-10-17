@@ -227,10 +227,6 @@ weather-dashboard-pin/
 └── README.md                     # Este archivo
 ```
 
-## 🤝 Contribuir
-
-Ver [CONTRIBUTING.md](CONTRIBUTING.md).
-
 ## 📄 Licencia
 
 MIT License — ver [LICENSE](LICENSE).
