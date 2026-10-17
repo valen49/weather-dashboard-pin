@@ -1,8 +1,12 @@
 # Plan de acción — Alinear weather-dashboard con lo aprendido en el curso DevOps
 
-Este documento compara lo cubierto en la diplomatura DevOps (repo devops-curso) contra
+> ⚠️ **Snapshot histórico, no refleja el estado actual.** Generado el 2026-09-17, antes de
+> adaptar el repo al Proyecto 1 del PIN. Varios de los gaps acá listados ya se resolvieron
+> (ver [README.md](README.md) para el estado real y actualizado).
+
+Este documento compara lo cubierto en el curso DevOps (repo devops-curso) contra
 el estado real de este repo, identificando gaps concretos y un plan priorizado para
-cerrarlos. Generado el 2026-09-17.
+cerrarlos.
 
 ## Docker
 - [x] Imágenes base fijadas (python:3.11-slim) — pendiente confirmar pin exacto de Node 20 en Dockerfile.e2e

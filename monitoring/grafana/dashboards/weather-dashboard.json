@@ -1,5 +1,5 @@
 {
-  "title": "Weather Dashboard - Overview",
+  "title": "Weather Dashboard - Resumen",
   "uid": "weather-dashboard-overview",
   "schemaVersion": 39,
   "version": 1,
@@ -8,7 +8,7 @@
   "panels": [
     {
       "id": 1,
-      "title": "Request rate by method",
+      "title": "Requests por método",
       "type": "timeseries",
       "datasource": "Prometheus",
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
@@ -22,7 +22,7 @@
     },
     {
       "id": 2,
-      "title": "Requests by status code",
+      "title": "Requests por status code",
       "type": "timeseries",
       "datasource": "Prometheus",
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
@@ -36,7 +36,7 @@
     },
     {
       "id": 3,
-      "title": "p95 request latency",
+      "title": "Latencia p95",
       "type": "timeseries",
       "datasource": "Prometheus",
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },

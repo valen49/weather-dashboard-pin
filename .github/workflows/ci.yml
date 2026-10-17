@@ -46,7 +46,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Snyk - análisis de vulnerabilidades en dependencias
-        uses: snyk/actions/python@master
+        uses: snyk/actions/python@v1.0.0
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
@@ -143,7 +143,7 @@ jobs:
             ghcr.io/valen49/weather-dashboard-pin:${{ github.sha }}
 
       - name: Generar SBOM (CycloneDX)
-        uses: anchore/sbom-action@v0
+        uses: anchore/sbom-action@v0.24.3
         with:
           image: ghcr.io/valen49/weather-dashboard-pin:${{ github.sha }}
           format: cyclonedx-json
@@ -195,6 +195,12 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
+          envs: GRAFANA_ADMIN_USER,GRAFANA_ADMIN_PASSWORD
           script: |
             cd ~/monitoring
+            export GRAFANA_ADMIN_USER="$GRAFANA_ADMIN_USER"
+            export GRAFANA_ADMIN_PASSWORD="$GRAFANA_ADMIN_PASSWORD"
             docker compose up -d
+        env:
+          GRAFANA_ADMIN_USER: ${{ secrets.GRAFANA_ADMIN_USER }}
+          GRAFANA_ADMIN_PASSWORD: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}

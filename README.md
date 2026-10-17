@@ -49,8 +49,9 @@ Proyecto 1. El original sigue intacto como estaba.
 ```
 ┌──────────────┐     push a main      ┌──────────────────────┐
 │   GitHub     │ ───────────────────► │   GitHub Actions      │
-│   Actions    │                      │   (unit → security →  │
-│   (CI/CD)    │                      │    e2e → build&deploy)│
+│   Actions    │                      │   (unit + security en │
+│   (CI/CD)    │                      │   paralelo → e2e →    │
+│              │                      │    build&deploy)      │
 └──────────────┘                      └───────────┬───────────┘
                                                     │
                         ┌───────────────────────────┼───────────────────────────┐
