@@ -29,6 +29,4 @@ RUN npx playwright install --with-deps chromium
 # Cambiar al usuario no-root
 USER testuser
 
-EXPOSE 3000
-
 CMD ["npx", "playwright", "test", "--project=chromium"]
