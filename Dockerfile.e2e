@@ -2,12 +2,12 @@ FROM mcr.microsoft.com/playwright/python:v1.58.0-noble
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Create non-root user
+# Crear usuario no-root
 RUN useradd --create-home --shell /bin/bash testuser
 
 WORKDIR /app
 
-# Python deps
+# Dependencias de Python
 COPY requirements.txt requirements-dev.txt ./
 RUN pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt
 
@@ -16,17 +16,17 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y --no-install-recommends nodejs && \
     rm -rf /var/lib/apt/lists/*
 
-# Node deps (before code for better caching)
+# Dependencias de Node (antes del código, para mejor cacheo)
 COPY package*.json ./
 RUN npm ci
 
-# Application code + config
+# Código de la aplicación + config
 COPY . .
 
-# Install browsers
+# Instalar navegadores
 RUN npx playwright install --with-deps chromium
 
-# Switch to non-root user
+# Cambiar al usuario no-root
 USER testuser
 
 EXPOSE 3000
