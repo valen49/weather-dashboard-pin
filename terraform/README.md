@@ -68,7 +68,7 @@ terraform destroy    # la destruye cuando no se necesita más
 **Importante**: la IP pública de la instancia **cambia en cada `apply`** (no se reserva una
 Elastic IP). Después de cada `apply`, hay que tomar el valor del output `ip_publica` y
 actualizar el secret `EC2_HOST` en GitHub (Settings → Secrets and variables → Actions) del
-repo `weather-dashboard`, para que el job `build-and-deploy` del workflow siga apuntando a
+repo `weather-dashboard-pin`, para que el job `build-and-deploy` del workflow siga apuntando a
 la instancia correcta.
 
 ## Nota de seguridad

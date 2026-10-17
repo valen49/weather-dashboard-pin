@@ -12,8 +12,6 @@ playwright-report/
 *.md
 Dockerfile*
 docker-compose.yml
-Jenkinsfile
-k8s-*.yaml
 .github/
 .git/
 *.log
