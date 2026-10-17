@@ -1,6 +1,6 @@
 # 🌤️ Weather Dashboard — PIN
 
-Proyecto Integrador Final (PIN) del curso **DevOps** de [mundosE](https://mundose.com/) (UNC/FCEFyN) —
+Proyecto Integrador Final (PIN) del curso **DevOps** de **mundosE** (UNC/FCEFyN) —
 **Proyecto 1: CI/CD con GitHub Actions + Terraform + Docker**.
 
 Dashboard de clima en Flask que consume la API pública y gratuita de [Open-Meteo](https://open-meteo.com/)
@@ -190,7 +190,8 @@ Detalle completo del setup (bootstrap del bucket de state, manejo de la keypair,
 La app expone métricas en formato Prometheus en `/metrics` (vía `prometheus-flask-exporter`). El stack de
 [`monitoring/`](monitoring/) las scrapea y las visualiza:
 
-- **Prometheus** (`:9090`): scrapea `weather-dashboard:5000/metrics` cada 15s.
+- **Prometheus** (`:9090`): scrapea `/metrics` de la app (vía `host.docker.internal:5000`, ya que la
+  app corre como contenedor standalone fuera de la red de `monitoring/`) cada 15s.
 - **Grafana** (`:3000`): datasource de Prometheus y dashboard provisionados automáticamente al levantar
   el stack (no requiere configuración manual). El dashboard incluye 3 paneles: requests por método,
   requests por status code, y latencia p95 por endpoint.
@@ -235,7 +236,7 @@ MIT License — ver [LICENSE](LICENSE).
 
 - [Open-Meteo](https://open-meteo.com/) por la API de clima gratuita
 - [Flask](https://flask.palletsprojects.com/), [Playwright](https://playwright.dev/), [Docker](https://www.docker.com/), [Terraform](https://www.terraform.io/), [Prometheus](https://prometheus.io/) y [Grafana](https://grafana.com/)
-- El curso **DevOps** de [mundosE](https://mundose.com/) (UNC/FCEFyN) y su equipo docente
+- El curso **DevOps** de **mundosE** (UNC/FCEFyN) y su equipo docente
 
 ---
 
