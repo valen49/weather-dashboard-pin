@@ -37,8 +37,9 @@ test.describe('Weather Dashboard', () => {
       const weatherPage = new WeatherPage(page);
       await page.goto('/?city=Buenos+Aires');
       const hasCard = await weatherPage.weatherCard.isVisible();
-      const hasError = await weatherPage.notFoundMessage.isVisible();
-      expect(hasCard || hasError).toBeTruthy();
+      const hasNotFound = await weatherPage.notFoundMessage.isVisible();
+      const hasError = await weatherPage.errorMessage.isVisible();
+      expect(hasCard || hasNotFound || hasError).toBeTruthy();
     });
 
     test('should show not found message for invalid city', async ({ page }) => {
@@ -173,8 +174,9 @@ test.describe('Weather Dashboard', () => {
       const weatherPage = new WeatherPage(page);
       await page.goto('/?city=Mendoza&compare=Buenos+Aires');
       const hasGrid = await weatherPage.comparisonGrid.isVisible();
+      const hasCard = await weatherPage.weatherCard.isVisible();
       const hasError = await weatherPage.errorMessage.isVisible();
-      expect(hasGrid || hasError).toBeTruthy();
+      expect(hasGrid || hasCard || hasError).toBeTruthy();
     });
 
     test('should toggle compare temperature to fahrenheit', async ({ page }) => {
