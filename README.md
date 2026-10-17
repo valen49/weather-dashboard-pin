@@ -28,8 +28,10 @@ in situ, lo **cloné completo** (con todos los commits) a este repo, `weather-da
 donde se hizo toda la limpieza, el ajuste de infraestructura y la alineación 1 a 1 con la rúbrica del
 Proyecto 1. El original sigue intacto como estaba.
 
-> La aplicación base (Flask + Open-Meteo) fue generada con asistencia de IA, como parte del encuentro de
-> "IA en DevOps" del curso, y luego evolucionada manualmente sprint a sprint.
+> La idea de la aplicación base (Flask + Open-Meteo) surgió de una sugerencia de un asistente de IA
+> (ChatGPT o Claude) apenas arrancado el curso. De ahí en adelante, tanto `devops-curso` como
+> `weather-dashboard` y este mismo repo se desarrollaron con asistencia de **Claude Code** (integración
+> con VS Code, plan pago básico), evolucionando sprint a sprint sobre esa base inicial.
 
 ## ✨ Features
 
