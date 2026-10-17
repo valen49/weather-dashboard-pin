@@ -1,28 +1,27 @@
 FROM python:3.11-slim
 
-# Set working directory inside the container
+# Directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Create a non-root user for security
+# Crear un usuario no-root por seguridad
 RUN adduser --disabled-password --gecos '' appuser
 
-# Copy and install dependencies
+# Copiar e instalar dependencias
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copiar el código de la aplicación
 COPY app/ ./app/
 COPY run.py .
 
-# Switch to non-root user
+# Cambiar al usuario no-root
 USER appuser
 
-# Document which port the app listens on
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:5000/health').read()" || exit 1
 
 EXPOSE 5000
 
-# Run the application
+# Correr la aplicación
 CMD ["python", "run.py"]

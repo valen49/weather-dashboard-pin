@@ -12,18 +12,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: 'pip' # Cache automático de dependencias
 
-      - name: Install dependencies
+      - name: Instalar dependencias
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt -r requirements-dev.txt
 
-      - name: Run unit tests
+      - name: Correr tests unitarios
         run: pytest tests/ -v
 
   security:
@@ -34,25 +34,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: 'pip'
 
-      - name: Install dependencies
+      - name: Instalar dependencias
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Snyk - dependency vulnerability scan
+      - name: Snyk - análisis de vulnerabilidades en dependencias
         uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high --file=requirements.txt
 
-      - name: SonarQube Cloud - code analysis
+      - name: SonarQube Cloud - análisis de código
         uses: SonarSource/sonarqube-scan-action@v8.3.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -70,45 +70,45 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: 'pip'
 
-      - name: Set up Node
+      - name: Configurar Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: 'npm'
 
-      - name: Get Playwright version
+      - name: Obtener versión de Playwright
         run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').packages['node_modules/@playwright/test'].version)")" >> $GITHUB_ENV
 
-      - name: Cache Playwright browsers
+      - name: Cachear navegadores de Playwright
         uses: actions/cache@v4
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
           key: playwright-chromium-${{ env.PLAYWRIGHT_VERSION }}
 
-      - name: Install dependencies
+      - name: Instalar dependencias
         run: |
           pip install -r requirements.txt
           npm ci
 
-      - name: Install Playwright browsers
+      - name: Instalar navegadores de Playwright
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install chromium --with-deps
 
-      - name: Install Playwright system deps only
+      - name: Instalar solo dependencias de sistema de Playwright
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
-      - name: Run E2E tests
+      - name: Correr tests E2E
         run: npx playwright test --project=chromium
 
-      - name: Upload Playwright Report
+      - name: Subir reporte de Playwright
         if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -126,14 +126,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Log in to GHCR
+      - name: Iniciar sesión en GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push image
+      - name: Construir y publicar imagen
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -142,7 +142,7 @@ jobs:
             ghcr.io/valen49/weather-dashboard-pin:latest
             ghcr.io/valen49/weather-dashboard-pin:${{ github.sha }}
 
-      - name: Generate SBOM (CycloneDX)
+      - name: Generar SBOM (CycloneDX)
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/valen49/weather-dashboard-pin:${{ github.sha }}
@@ -150,14 +150,14 @@ jobs:
           output-file: sbom.cyclonedx.json
           upload-artifact: false
 
-      - name: Upload SBOM artifact
+      - name: Subir artefacto SBOM
         uses: actions/upload-artifact@v4
         with:
           name: sbom-cyclonedx
           path: sbom.cyclonedx.json
           retention-days: 30
 
-      - name: Deploy to EC2
+      - name: Desplegar en EC2
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -173,13 +173,13 @@ jobs:
                 echo "Health check OK"
                 exit 0
               fi
-              echo "Health check failed, retry $i/5..."
+              echo "Health check fallido, reintento $i/5..."
               sleep 5
             done
-            echo "Health check failed after 5 retries"
+            echo "Health check fallido después de 5 reintentos"
             exit 1
 
-      - name: Copy monitoring stack to EC2
+      - name: Copiar stack de monitoring a la EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -189,7 +189,7 @@ jobs:
           target: "~/monitoring"
           strip_components: 1
 
-      - name: Deploy monitoring stack (Prometheus + Grafana)
+      - name: Desplegar stack de monitoring (Prometheus + Grafana)
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}

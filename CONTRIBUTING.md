@@ -1,18 +1,18 @@
-# Contributing to Weather Dashboard
+# Cómo contribuir a Weather Dashboard
 
-## Branch naming
+## Nomenclatura de branches
 
-| Type | Pattern | Example |
+| Tipo | Patrón | Ejemplo |
 |------|---------|---------|
-| Feature | `feature/<short-description>` | `feature/unit-toggle` |
-| Bug fix | `fix/<short-description>` | `fix/health-endpoint` |
-| Chore / refactor | `chore/<short-description>` | `chore/update-deps` |
+| Feature | `feature/<descripción-corta>` | `feature/unit-toggle` |
+| Fix | `fix/<descripción-corta>` | `fix/health-endpoint` |
+| Chore / refactor | `chore/<descripción-corta>` | `chore/update-deps` |
 
-Never commit directly to `main`. All changes go through a PR.
+Nunca commitear directo a `main`. Todos los cambios van por PR.
 
-## Commit messages
+## Mensajes de commit
 
-Follow [Conventional Commits](https://www.conventionalcommits.org/):
+Seguir [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
 feat: add Celsius/Fahrenheit toggle
@@ -20,41 +20,41 @@ fix: return dynamic timestamp in /health
 chore: update playwright to 1.44
 ```
 
-Types: `feat`, `fix`, `refactor`, `test`, `chore`, `docs`.
+Tipos: `feat`, `fix`, `refactor`, `test`, `chore`, `docs`.
 
-## Workflow
+## Flujo de trabajo
 
-1. Branch off `main`: `git checkout -b feature/my-feature`
-2. Make changes and commit
-3. Push: `git push origin feature/my-feature`
-4. Open a PR against `main`
-5. CI (GitHub Actions) must pass before merging
+1. Crear branch desde `main`: `git checkout -b feature/mi-feature`
+2. Hacer los cambios y commitear
+3. Pushear: `git push origin feature/mi-feature`
+4. Abrir un PR contra `main`
+5. El CI (GitHub Actions) tiene que pasar antes de mergear
 6. Squash and merge
 
-## Running tests locally
+## Correr los tests localmente
 
 ```bash
-# Unit tests
+# Tests unitarios
 pip install -r requirements.txt -r requirements-dev.txt
 pytest tests/ -v
 
-# E2E tests
+# Tests E2E
 npm ci
 npx playwright install chromium --with-deps
 python run.py &
 npx playwright test --project=chromium
 ```
 
-## Code style
+## Estilo de código
 
-This project uses [Black](https://black.readthedocs.io/) and [isort](https://pycqa.github.io/isort/). Run before committing:
+Este proyecto usa [Black](https://black.readthedocs.io/) e [isort](https://pycqa.github.io/isort/). Correr antes de commitear:
 
 ```bash
 black app/ tests/
 isort app/ tests/
 ```
 
-Or install pre-commit hooks:
+O instalar los hooks de pre-commit:
 
 ```bash
 pip install pre-commit
