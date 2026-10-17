@@ -178,3 +178,23 @@ jobs:
             done
             echo "Health check failed after 5 retries"
             exit 1
+
+      - name: Copy monitoring stack to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "monitoring/*"
+          target: "~/monitoring"
+          strip_components: 1
+
+      - name: Deploy monitoring stack (Prometheus + Grafana)
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/monitoring
+            docker compose up -d
