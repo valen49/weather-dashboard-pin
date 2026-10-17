@@ -1,7 +1,7 @@
 # 🌤️ Weather Dashboard — PIN
 
-Proyecto Integrador Final (PIN) de la diplomatura **"We Want Skills"** (UNC/FCEFyN + mundosE) — **Proyecto
-1: CI/CD con GitHub Actions + Terraform + Docker**.
+Proyecto Integrador Final (PIN) del curso **DevOps** de [mundosE](https://mundose.com/) (UNC/FCEFyN) —
+**Proyecto 1: CI/CD con GitHub Actions + Terraform + Docker**.
 
 Dashboard de clima en Flask que consume la API pública y gratuita de [Open-Meteo](https://open-meteo.com/)
 para mostrar el clima actual y el pronóstico de 7 días de cualquier ciudad del mundo. La aplicación en sí
@@ -10,7 +10,7 @@ código y el stack de observabilidad que pide la consigna del PIN.
 
 ## 📖 La historia de este proyecto
 
-Durante la diplomatura llevé en paralelo dos repos con propósitos distintos: **`devops-curso`**, un repo
+Durante el curso llevé en paralelo dos repos con propósitos distintos: **`devops-curso`**, un repo
 teórico-práctico donde iba resolviendo los laboratorios y ejercicios de cada encuentro tal cual los pedía
 la cursada, y **`weather-dashboard`**, un repo 100% práctico que arranqué por mi cuenta para ir
 integrando todo lo que aprendía sobre una aplicación real: pipelines de CI/CD, contenedores, Kubernetes,
@@ -29,7 +29,7 @@ donde se hizo toda la limpieza, el ajuste de infraestructura y la alineación 1 
 Proyecto 1. El original sigue intacto como estaba.
 
 > La aplicación base (Flask + Open-Meteo) fue generada con asistencia de IA, como parte del encuentro de
-> "IA en DevOps" de la diplomatura, y luego evolucionada manualmente sprint a sprint.
+> "IA en DevOps" del curso, y luego evolucionada manualmente sprint a sprint.
 
 ## ✨ Features
 
@@ -221,7 +221,7 @@ weather-dashboard-pin/
 ├── Dockerfile                    # Imagen de la app
 ├── Dockerfile.e2e                # Imagen para correr los tests E2E
 ├── docker-compose.yml            # Desarrollo local
-├── PLAN-DEVOPS.md                # Gap analysis histórico vs. la diplomatura
+├── PLAN-DEVOPS.md                # Gap analysis histórico vs. el curso
 └── README.md                     # Este archivo
 ```
 
@@ -237,8 +237,8 @@ MIT License — ver [LICENSE](LICENSE).
 
 - [Open-Meteo](https://open-meteo.com/) por la API de clima gratuita
 - [Flask](https://flask.palletsprojects.com/), [Playwright](https://playwright.dev/), [Docker](https://www.docker.com/), [Terraform](https://www.terraform.io/), [Prometheus](https://prometheus.io/) y [Grafana](https://grafana.com/)
-- La diplomatura **We Want Skills** (UNC/FCEFyN + mundosE) y su equipo docente
+- El curso **DevOps** de [mundosE](https://mundose.com/) (UNC/FCEFyN) y su equipo docente
 
 ---
 
-**Proyecto Integrador Final — We Want Skills, 2026**
+**Proyecto Integrador Final — Curso DevOps, mundosE, 2026**
