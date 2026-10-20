@@ -347,7 +347,7 @@
             </a>
         </div>
 
-        {% elif compare and not compare_weather %}
+        {% elif compare and compare_weather.not_found %}
         <!-- Second city not found -->
         <div class="weather-card" data-testid="weather-card">
             {% if location %}
