@@ -33,3 +33,6 @@ terraform/*.tfstate
 terraform/*.tfstate.*
 terraform/*.pem
 *.pem
+
+# Armado local del .zip de entrega (no es parte del repo)
+entrega-pin/

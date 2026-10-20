@@ -165,13 +165,16 @@ Workflow en [`.github/workflows/ci.yml`](.github/workflows/ci.yml), con 4 jobs e
    - deploy por SSH a la EC2: `docker pull` + `docker run` de la imagen nueva, con health check contra `/health`
    - copia del stack de `monitoring/` a la EC2 y `docker compose up -d` para levantar Prometheus + Grafana
 
+![Pipeline completo en verde](docs/screenshots/github-actions.png)
+
 ## ☁️ Infraestructura (Terraform)
 
 Todo en [`terraform/`](terraform/):
 
 - `providers.tf`: provider de AWS (`us-east-1`) y backend remoto del state en S3 + DynamoDB (para lock).
-- `ec2.tf`: instancia EC2 `t2.micro` (Ubuntu 22.04), con Docker y `docker-compose-plugin` instalados vía
-  `user_data`.
+- `ec2.tf`: instancia EC2 `t2.micro` (Ubuntu 22.04), con Docker y el plugin de Docker Compose
+  instalados vía `user_data` (Compose se baja directo del binario oficial, no del paquete
+  `docker-compose-plugin` de apt — ese no existe en los repos default de Ubuntu 22.04).
 - `security_group.tf`: abre los puertos 22 (SSH, deploy desde GitHub Actions), 5000 (app), 3000 (Grafana)
   y 9090 (Prometheus).
 - `outputs.tf`: IP pública de la instancia y comando de SSH listo para copiar/pegar.
@@ -197,7 +200,7 @@ La app expone métricas en formato Prometheus en `/metrics` (vía `prometheus-fl
   el stack (no requiere configuración manual). El dashboard incluye 3 paneles: requests por método,
   requests por status code, y latencia p95 por endpoint.
 
-<!-- TODO: agregar captura del dashboard de Grafana acá después del ensayo final -->
+![Dashboard de Grafana con métricas reales](docs/screenshots/grafana.png)
 
 ## 🔒 Seguridad
 
@@ -207,6 +210,10 @@ La app expone métricas en formato Prometheus en `/metrics` (vía `prometheus-fl
   del workflow.
 - Imagen Docker corre con usuario no-root.
 - Sin credenciales ni secretos hardcodeados en el código — todo vía GitHub Secrets.
+
+| Snyk | SonarQube Cloud |
+|---|---|
+| ![Resultado del scan de Snyk](docs/screenshots/snyk.png) | ![Análisis de SonarQube Cloud](docs/screenshots/sonarcloud.png) |
 
 ## 📁 Estructura del proyecto
 
@@ -221,11 +228,11 @@ weather-dashboard-pin/
 ├── e2e/                          # Tests E2E (Playwright, Page Object Model)
 ├── terraform/                    # Infraestructura como código (AWS)
 ├── monitoring/                   # Prometheus + Grafana (docker-compose + provisioning)
+├── docs/screenshots/              # Capturas: pipeline, Snyk, SonarCloud, Grafana
 ├── .github/workflows/ci.yml      # Pipeline de CI/CD
 ├── Dockerfile                    # Imagen de la app
 ├── Dockerfile.e2e                # Imagen para correr los tests E2E
 ├── docker-compose.yml            # Desarrollo local
-├── PLAN-DEVOPS.md                # Gap analysis histórico vs. el curso
 └── README.md                     # Este archivo
 ```
 
