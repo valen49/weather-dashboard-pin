@@ -202,6 +202,11 @@ La app expone métricas en formato Prometheus en `/metrics` (vía `prometheus-fl
 
 ![Dashboard de Grafana con métricas reales](docs/screenshots/grafana.png)
 
+Para correr el stack en local: copiar `monitoring/.env.example` a `monitoring/.env`, completar
+`GRAFANA_ADMIN_USER`/`GRAFANA_ADMIN_PASSWORD`, y `docker compose -f monitoring/docker-compose.yml up -d`
+(con la app ya corriendo en `:5000`). En el pipeline, esas mismas variables se inyectan desde GitHub
+Secrets, no desde este archivo.
+
 ## 🔒 Seguridad
 
 - **Snyk**: escaneo de vulnerabilidades en las dependencias de Python (`--severity-threshold=high`).
