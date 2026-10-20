@@ -8,9 +8,13 @@ el pipeline de CI/CD del PIN (build en GHCR + deploy por SSH a EC2).
 - **Instancia EC2** (`ec2.tf`): un `t2.micro` con Ubuntu 22.04. La AMI no está hardcodeada:
   se resuelve dinámicamente con un `data "aws_ami"` filtrado por el owner de Canonical
   (`099720109477`) y el nombre `ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*`,
-  tomando siempre la más reciente. Vía `user_data` se instala Docker, se habilita el
-  servicio y se agrega el usuario `ubuntu` al grupo `docker`, para que la instancia quede
-  lista para recibir `docker run` apenas termina de arrancar.
+  tomando siempre la más reciente. Vía `user_data` se instala Docker (`docker.io`), se
+  habilita el servicio y se agrega el usuario `ubuntu` al grupo `docker`; también se baja
+  el binario de **Docker Compose** directo desde los releases oficiales de GitHub a
+  `/usr/local/lib/docker/cli-plugins/docker-compose` (el paquete `docker-compose-plugin` no
+  existe en los repos default de Ubuntu 22.04, solo en el repo propio de Docker — se evita
+  depender de ese repo extra). Con esto la instancia queda lista para `docker run` y
+  `docker compose up` apenas termina de arrancar.
 - **Security Group** (`security_group.tf`): habilita entrada en los puertos `22` (SSH),
   `5000` (la app weather-dashboard), `3000` (Grafana) y `9090` (Prometheus). Egress
   abierto sin restricciones.
