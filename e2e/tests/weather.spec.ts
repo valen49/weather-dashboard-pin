@@ -202,4 +202,37 @@ test.describe('Weather Dashboard', () => {
       }
     });
   });
+
+  test.describe('Dark Mode', () => {
+    test.use({ colorScheme: 'light' });
+
+    test('should toggle dark mode on and off', async ({ page }) => {
+      const weatherPage = new WeatherPage(page);
+      await weatherPage.goto();
+      const html = page.locator('html');
+      await expect(html).not.toHaveClass(/dark/);
+      await weatherPage.themeToggle.click();
+      await expect(html).toHaveClass(/dark/);
+      await weatherPage.themeToggle.click();
+      await expect(html).not.toHaveClass(/dark/);
+    });
+
+    test('should remember dark mode after reload', async ({ page }) => {
+      const weatherPage = new WeatherPage(page);
+      await weatherPage.goto();
+      await weatherPage.themeToggle.click();
+      await page.reload();
+      await expect(page.locator('html')).toHaveClass(/dark/);
+    });
+
+    test.describe('with a dark system preference', () => {
+      test.use({ colorScheme: 'dark' });
+
+      test('should start in dark mode on first visit', async ({ page }) => {
+        const weatherPage = new WeatherPage(page);
+        await weatherPage.goto();
+        await expect(page.locator('html')).toHaveClass(/dark/);
+      });
+    });
+  });
 });

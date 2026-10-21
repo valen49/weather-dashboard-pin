@@ -24,6 +24,7 @@ export class WeatherPage {
   readonly compareTemperature: Locator;
   readonly compareLocationName: Locator;
   readonly comparisonGrid: Locator;
+  readonly themeToggle: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -48,6 +49,7 @@ export class WeatherPage {
     this.compareTemperature = page.locator(WeatherLocators.compareTemperature);
     this.compareLocationName = page.locator(WeatherLocators.compareLocationName);
     this.comparisonGrid = page.locator(WeatherLocators.comparisonGrid);
+    this.themeToggle = page.locator(WeatherLocators.themeToggle);
   }
 
   async goto() {
