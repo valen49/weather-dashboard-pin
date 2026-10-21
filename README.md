@@ -169,6 +169,18 @@ Workflow en [`.github/workflows/ci.yml`](.github/workflows/ci.yml), con 4 jobs e
 
 ## ☁️ Infraestructura (Terraform)
 
+El proyecto cubre las dos modalidades de despliegue que plantea la consigna, cada una con su propio
+módulo de Terraform:
+
+| Modalidad | Carpeta | Dónde corre | Cómo se despliega |
+|---|---|---|---|
+| **Nube** | [`terraform/`](terraform/) | EC2 en AWS | Automático: cada push a `main` despliega vía GitHub Actions |
+| **Local** | [`terraform-local/`](terraform-local/) | VM Ubuntu en VirtualBox | Manual: `terraform apply` en la máquina local |
+
+Las dos levantan lo mismo: la imagen publicada en GHCR más el stack de Prometheus + Grafana.
+
+### Nube (AWS)
+
 Todo en [`terraform/`](terraform/):
 
 - `providers.tf`: provider de AWS (`us-east-1`) y backend remoto del state en S3 + DynamoDB (para lock).
@@ -189,6 +201,24 @@ terraform apply
 Detalle completo del setup (bootstrap del bucket de state, manejo de la keypair, etc.) en
 [`terraform/README.md`](terraform/README.md).
 
+### Local (VirtualBox)
+
+Todo en [`terraform-local/`](terraform-local/). Terraform crea la VM con `VBoxManage` (la CLI nativa de
+VirtualBox), instala Ubuntu Server 22.04 de forma desatendida y después entra por SSH para instalar
+Docker y levantar la app y el monitoring. Los puertos quedan expuestos solo en `127.0.0.1`.
+
+```bash
+cd terraform-local
+terraform init
+terraform apply     # ~20 min la primera vez (instalación del SO)
+terraform destroy
+```
+
+El pipeline de GitHub Actions **no** despliega a esta VM: un runner de GitHub corre en la nube y no
+puede llegar a una máquina detrás de NAT en una red privada. Para traer una versión nueva hay que
+repetir el `terraform apply`. Prerrequisitos y detalle en
+[`terraform-local/README.md`](terraform-local/README.md).
+
 ## 📊 Observabilidad
 
 La app expone métricas en formato Prometheus en `/metrics` (vía `prometheus-flask-exporter`). El stack de
@@ -200,7 +230,9 @@ La app expone métricas en formato Prometheus en `/metrics` (vía `prometheus-fl
   el stack (no requiere configuración manual). El dashboard incluye 3 paneles: requests por método,
   requests por status code, y latencia p95 por endpoint.
 
-![Dashboard de Grafana con métricas reales](docs/screenshots/grafana.png)
+| Nube (EC2 en AWS) | Local (VM en VirtualBox) |
+|---|---|
+| ![Dashboard de Grafana en la EC2](docs/screenshots/grafana.png) | ![Dashboard de Grafana en la VM local](docs/screenshots/grafana-local.png) |
 
 Para correr el stack en local: copiar `monitoring/.env.example` a `monitoring/.env`, completar
 `GRAFANA_ADMIN_USER`/`GRAFANA_ADMIN_PASSWORD`, y `docker compose -f monitoring/docker-compose.yml up -d`
@@ -232,6 +264,7 @@ weather-dashboard-pin/
 ├── tests/                        # Tests unitarios (pytest)
 ├── e2e/                          # Tests E2E (Playwright, Page Object Model)
 ├── terraform/                    # Infraestructura como código (AWS)
+├── terraform-local/              # Infraestructura como código (VirtualBox)
 ├── monitoring/                   # Prometheus + Grafana (docker-compose + provisioning)
 ├── docs/screenshots/              # Capturas: pipeline, Snyk, SonarCloud, Grafana
 ├── .github/workflows/ci.yml      # Pipeline de CI/CD
