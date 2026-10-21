@@ -32,6 +32,11 @@ terraform/.terraform/
 terraform/*.tfstate
 terraform/*.tfstate.*
 terraform/*.pem
+terraform-local/.terraform/
+terraform-local/*.tfstate
+terraform-local/*.tfstate.*
+terraform-local/.terraform.tfstate.lock.info
+terraform-local/monitoring.tar.gz
 *.pem
 
 # Armado local del .zip de entrega (no es parte del repo)
