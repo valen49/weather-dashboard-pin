@@ -23,13 +23,43 @@ def get_weather_icon(weather_code: int) -> str:
     else:
         return "🌡️"
 
-def get_coordinates(city: str):
+# Constituent countries the geocoder does not list as countries on their own.
+COUNTRY_ALIASES = {
+    "inglaterra": "GB",
+    "england": "GB",
+    "escocia": "GB",
+    "scotland": "GB",
+    "gales": "GB",
+    "wales": "GB",
+}
+
+def get_country_code(country: str):
+    country = country.strip()
+    if len(country) == 2 and country.isalpha():
+        return country.upper()
+    alias = COUNTRY_ALIASES.get(country.lower())
+    if alias:
+        return alias
     try:
         response = requests.get(
             GEOCODING_URL,
-            params={"name": city, "count": 1, "language": "en"},
+            params={"name": country, "count": 10, "language": "es"},
             timeout=10
         )
+        response.raise_for_status()
+        for result in response.json().get("results", []):
+            if result.get("feature_code", "").startswith("PCL"):
+                return result["country_code"]
+        return None
+    except Exception:
+        return None
+
+def get_coordinates(city: str, country_code=None):
+    params = {"name": city, "count": 1, "language": "es"}
+    if country_code:
+        params["countryCode"] = country_code
+    try:
+        response = requests.get(GEOCODING_URL, params=params, timeout=10)
         response.raise_for_status()
         data = response.json()
         if not data.get("results"):
@@ -42,7 +72,8 @@ def get_coordinates(city: str):
             "longitude": result["longitude"]
         }
     except Exception:
-        return None
+        # Distinct from None (city not found): the API itself failed.
+        return {"api_error": True}
 
 def get_weather(latitude=-32.89, longitude=-68.83):
     try:

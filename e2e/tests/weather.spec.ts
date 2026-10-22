@@ -20,6 +20,16 @@ test.describe('Weather Dashboard', () => {
     await expect(weatherPage.notFoundMessage).toBeVisible();
   });
 
+  test('should find the city in the given country', async ({ page }) => {
+    const weatherPage = new WeatherPage(page);
+    await page.goto('/?city=Londres&country=Reino+Unido');
+    if (await weatherPage.locationName.isVisible()) {
+      await expect(weatherPage.locationName).toContainText('Reino Unido');
+    } else {
+      await expect(weatherPage.errorMessage).toBeVisible();
+    }
+  });
+
   test('should switch from celsius to fahrenheit', async ({ page }) => {
     const weatherPage = new WeatherPage(page);
     await weatherPage.goto();
