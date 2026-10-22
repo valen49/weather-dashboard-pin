@@ -43,7 +43,10 @@ jobs:
       - name: Instalar dependencias
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Medir cobertura de tests (para SonarQube Cloud)
+        run: pytest tests/ --cov=app --cov-report=xml
 
       - name: Snyk - análisis de vulnerabilidades en dependencias
         uses: snyk/actions/python@v1.0.0
@@ -62,6 +65,7 @@ jobs:
             -Dsonar.projectKey=valen49_weather-dashboard-pin
             -Dsonar.sources=app
             -Dsonar.tests=tests
+            -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.exclusions=node_modules/**,e2e/**,playwright-report/**
 
   e2e-tests:
