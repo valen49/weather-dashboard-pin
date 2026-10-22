@@ -45,6 +45,25 @@
             gap: 10px;
             margin-bottom: 24px;
         }
+        .recent-searches {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            margin: -12px 0 24px;
+            font-size: 0.9rem;
+        }
+        .recent-searches[hidden] { display: none; }
+        .recent-label { color: #718096; }
+        .recent-chip {
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            color: #2d3748;
+            text-decoration: none;
+        }
+        .recent-chip:hover { background: #cbd5e0; }
+        #recent-list { display: contents; }
         input {
             flex: 1;
             padding: 10px;
@@ -336,6 +355,9 @@
         html.dark .temperature,
         html.dark .forecast-temp-max { color: #63b3ed; }
         html.dark .error { color: #fc8181; }
+        html.dark .recent-label { color: #a0aec0; }
+        html.dark .recent-chip { background: #2d3748; color: #e2e8f0; }
+        html.dark .recent-chip:hover { background: #4a5568; }
         html.dark .theme-toggle { border-color: #4a5568; }
         html.dark .theme-toggle:hover { background-color: #4a5568; }
         html.dark .comparison-grid .weather-card:nth-child(2)::before {
@@ -378,6 +400,18 @@
         {% endif %}
         <button type="submit" data-testid="search-button">Search</button>
     </form>
+
+    <div class="recent-searches" data-testid="recent-searches" hidden>
+        <span class="recent-label">Recent:</span>
+        <span id="recent-list"></span>
+    </div>
+
+    {% if city and location and weather and weather.success %}
+    <div id="search-meta" hidden
+         data-city="{{ city }}"
+         data-country="{{ country }}"
+         data-label="{{ location.name }}, {{ location.country }}"></div>
+    {% endif %}
 
     {% if weather %}
         {% if weather.success %}
@@ -572,9 +606,45 @@
             updateThemeButton();
         }
 
+        const RECENT_KEY = 'recentSearches';
+        const RECENT_MAX = 5;
+
+        function loadRecent() {
+            try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; } catch (e) { return []; }
+        }
+
+        function saveCurrentSearch() {
+            const meta = document.getElementById('search-meta');
+            if (!meta) return;
+            const entry = { city: meta.dataset.city, country: meta.dataset.country, label: meta.dataset.label };
+            const key = (e) => (e.city + '|' + e.country).toLowerCase();
+            const recent = [entry, ...loadRecent().filter(e => key(e) !== key(entry))].slice(0, RECENT_MAX);
+            try { localStorage.setItem(RECENT_KEY, JSON.stringify(recent)); } catch (e) {}
+        }
+
+        function renderRecent() {
+            const recent = loadRecent();
+            const container = document.querySelector('[data-testid="recent-searches"]');
+            const list = document.getElementById('recent-list');
+            if (!container || !list || recent.length === 0) return;
+            recent.forEach(e => {
+                const params = new URLSearchParams({ city: e.city });
+                if (e.country) params.set('country', e.country);
+                const chip = document.createElement('a');
+                chip.className = 'recent-chip';
+                chip.href = '/?' + params.toString();
+                chip.textContent = e.label;
+                chip.dataset.testid = 'recent-chip';
+                list.appendChild(chip);
+            });
+            container.hidden = false;
+        }
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             updateThemeButton();
+            saveCurrentSearch();
+            renderRecent();
 
             // Add touch support for mobile
             if ('ontouchstart' in window) {

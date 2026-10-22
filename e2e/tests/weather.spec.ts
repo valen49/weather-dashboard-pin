@@ -30,6 +30,15 @@ test.describe('Weather Dashboard', () => {
     }
   });
 
+  test('should remember recent searches', async ({ page }) => {
+    const weatherPage = new WeatherPage(page);
+    await page.goto('/?city=Mendoza');
+    if (await weatherPage.weatherCard.isVisible()) {
+      await weatherPage.goto();
+      await expect(page.getByTestId('recent-chip').first()).toContainText('Mendoza');
+    }
+  });
+
   test('should switch from celsius to fahrenheit', async ({ page }) => {
     const weatherPage = new WeatherPage(page);
     await weatherPage.goto();
