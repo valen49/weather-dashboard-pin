@@ -138,6 +138,8 @@ jobs:
         with:
           context: .
           push: true
+          build-args: |
+            GIT_SHA=${{ github.sha }}
           tags: |
             ghcr.io/valen49/weather-dashboard-pin:latest
             ghcr.io/valen49/weather-dashboard-pin:${{ github.sha }}
