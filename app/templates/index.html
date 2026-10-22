@@ -45,6 +45,18 @@
             gap: 10px;
             margin-bottom: 24px;
         }
+        /* Label read by screen readers but not shown on screen */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
         input {
             flex: 1;
             padding: 10px;
@@ -370,15 +382,19 @@
     </header>
 
     <form class="search-form" method="GET" action="/">
+        <label for="city-input" class="sr-only">City</label>
         <input
             type="text"
+            id="city-input"
             name="city"
             placeholder="Search for a city..."
             value="{{ city }}"
             data-testid="city-input"
         >
+        <label for="country-input" class="sr-only">Country</label>
         <input
             type="text"
+            id="country-input"
             name="country"
             class="country-input"
             placeholder="Country (optional)"
@@ -492,8 +508,10 @@
             <form class="search-form" method="GET" action="/" style="width: 100%;">
                 <input type="hidden" name="city" value="{{ city }}">
                 <input type="hidden" name="country" value="{{ country }}">
+                <label for="compare-input" class="sr-only">City to compare</label>
                 <input
                     type="text"
+                    id="compare-input"
                     name="compare"
                     placeholder="Second city..."
                     data-testid="compare-input"
@@ -570,7 +588,7 @@
             const btnText = isFahrenheit ? 'Switch to °C' : 'Switch to °F';
 
             document.querySelectorAll('[data-celsius]').forEach(el => {
-                const celsius = parseFloat(el.dataset.celsius);
+                const celsius = Number.parseFloat(el.dataset.celsius);
                 const value = isFahrenheit ? toFahrenheit(celsius) : celsius;
                 el.textContent = value + unit;
             });
