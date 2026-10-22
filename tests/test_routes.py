@@ -32,6 +32,15 @@ def test_index_with_city(client):
         response = client.get('/?city=Mendoza')
     assert response.status_code == 200
 
+def test_footer_shows_deployed_version(monkeypatch):
+    monkeypatch.setenv("APP_VERSION", "abc1234def5678")
+    app = create_app()
+    with app.test_client() as client, \
+         patch("app.routes.get_weather", return_value={"success": False}), \
+         patch("app.routes.get_forecast", return_value={"days": [], "success": False}):
+        response = client.get('/')
+    assert b">abc1234<" in response.data
+
 def test_index_with_invalid_city(client):
     with patch("app.routes.get_coordinates") as mock_coords:
         mock_coords.return_value = None

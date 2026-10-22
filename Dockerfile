@@ -14,6 +14,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app/ ./app/
 COPY run.py .
 
+# Commit desde el que se construyó la imagen (lo pasa el CI); se muestra en el footer
+ARG GIT_SHA=dev
+ENV APP_VERSION=$GIT_SHA
+
 # Cambiar al usuario no-root
 USER appuser
 

@@ -82,6 +82,16 @@
         }
         button:hover { background-color: #2c5282; }
         .country-input { flex: 0 1 240px; }
+        .app-footer {
+            margin-top: 40px;
+            padding-top: 16px;
+            border-top: 1px solid #cbd5e0;
+            color: #718096;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        .app-footer a { color: #2b6cb0; }
+        .app-footer [data-testid="app-version"] { font-family: monospace; }
         .weather-card {
             background: white;
             border-radius: 12px;
@@ -359,6 +369,8 @@
         html.dark .recent-chip { background: #2d3748; color: #e2e8f0; }
         html.dark .recent-chip:hover { background: #4a5568; }
         html.dark .theme-toggle { border-color: #4a5568; }
+        html.dark .app-footer { border-top-color: #4a5568; color: #a0aec0; }
+        html.dark .app-footer a { color: #63b3ed; }
         html.dark .theme-toggle:hover { background-color: #4a5568; }
         html.dark .comparison-grid .weather-card:nth-child(2)::before {
             background: #1a202c;
@@ -563,6 +575,16 @@
         </div>
     </div>
     {% endif %}
+
+    <footer class="app-footer" data-testid="app-footer">
+        Version
+        {% if app_version != 'dev' %}
+        <a href="https://github.com/valen49/weather-dashboard-pin/commit/{{ app_version }}" data-testid="app-version">{{ app_version[:7] }}</a>
+        {% else %}
+        <span data-testid="app-version">dev</span>
+        {% endif %}
+        · <a href="https://github.com/valen49/weather-dashboard-pin">Source on GitHub</a>
+    </footer>
 
     <script>
         let isFahrenheit = false;
