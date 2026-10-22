@@ -20,4 +20,5 @@ export const WeatherLocators = {
   compareTemperature: '[data-testid="compare-temperature"]',
   compareLocationName: '[data-testid="compare-location-name"]',
   comparisonGrid: '[data-testid="comparison-grid"]',
+  themeToggle: '[data-testid="theme-toggle"]',
 };

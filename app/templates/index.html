@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Dashboard</title>
+    <script>
+        // Runs before first paint so a dark-theme user never sees a white flash.
+        (function () {
+            let theme = null;
+            try { theme = localStorage.getItem('theme'); } catch (e) {}
+            if (!theme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                theme = 'dark';
+            }
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,6 +26,20 @@
             background-color: #f0f4f8;
         }
         h1 { color: #2d3748; }
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .theme-toggle {
+            padding: 8px 12px;
+            background-color: transparent;
+            border: 1px solid #cbd5e0;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        .theme-toggle:hover { background-color: #e2e8f0; }
         .search-form {
             display: flex;
             gap: 10px;
@@ -278,10 +305,52 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
+
+        /* Dark mode */
+        html.dark body {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        html.dark h1 { color: #f7fafc; }
+        html.dark input {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            color: #f7fafc;
+        }
+        html.dark input::placeholder { color: #a0aec0; }
+        html.dark .weather-card,
+        html.dark .forecast-card {
+            background: #2d3748;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        html.dark .location,
+        html.dark .forecast-date,
+        html.dark .forecast-temp-min,
+        html.dark .vs-label { color: #a0aec0; }
+        html.dark .weather-data { color: #e2e8f0; }
+        html.dark .temperature,
+        html.dark .forecast-temp-max { color: #63b3ed; }
+        html.dark .error { color: #fc8181; }
+        html.dark .theme-toggle { border-color: #4a5568; }
+        html.dark .theme-toggle:hover { background-color: #4a5568; }
+        html.dark .comparison-grid .weather-card:nth-child(2)::before {
+            background: #1a202c;
+            color: #a0aec0;
+        }
     </style>
 </head>
 <body>
-    <h1 data-testid="app-title">Weather Dashboard</h1>
+    <header class="app-header">
+        <h1 data-testid="app-title">Weather Dashboard</h1>
+        <button
+            type="button"
+            class="theme-toggle"
+            onclick="toggleTheme()"
+            aria-label="Toggle dark mode"
+            title="Toggle dark mode"
+            data-testid="theme-toggle"
+        >🌙</button>
+    </header>
 
     <form class="search-form" method="GET" action="/">
         <input
@@ -472,8 +541,23 @@
             }
         }
 
+        function updateThemeButton() {
+            const btn = document.querySelector('[data-testid="theme-toggle"]');
+            if (btn) {
+                btn.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) {}
+            updateThemeButton();
+        }
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
+            updateThemeButton();
+
             // Add touch support for mobile
             if ('ontouchstart' in window) {
                 document.body.classList.add('touch-device');
