@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from app.services import get_weather, get_coordinates, get_forecast, get_weather_icon
+from app.services import get_weather, get_coordinates, get_country_code, get_forecast, get_weather_icon
 
 def test_get_weather_success():
     mock_response = MagicMock()
@@ -62,7 +62,44 @@ def test_get_coordinates_failure():
     with patch("app.services.requests.get", side_effect=Exception("error")):
         result = get_coordinates("Buenos Aires")
 
-    assert result is None
+    assert result == {"api_error": True}
+
+def test_get_coordinates_sends_country_code():
+    mock_response = MagicMock()
+    mock_response.json.return_value = {"results": []}
+    mock_response.raise_for_status = MagicMock()
+
+    with patch("app.services.requests.get", return_value=mock_response) as mock_get:
+        get_coordinates("Londres", "GB")
+
+    assert mock_get.call_args.kwargs["params"]["countryCode"] == "GB"
+
+def test_get_country_code_from_two_letter_code():
+    assert get_country_code("gb") == "GB"
+
+def test_get_country_code_from_alias():
+    assert get_country_code("Inglaterra") == "GB"
+
+def test_get_country_code_from_api():
+    mock_response = MagicMock()
+    mock_response.json.return_value = {"results": [
+        {"name": "Argentina", "country_code": "MX", "feature_code": "PPL"},
+        {"name": "Argentina", "country_code": "AR", "feature_code": "PCLI"},
+    ]}
+    mock_response.raise_for_status = MagicMock()
+
+    with patch("app.services.requests.get", return_value=mock_response):
+        assert get_country_code("Argentina") == "AR"
+
+def test_get_country_code_not_found():
+    mock_response = MagicMock()
+    mock_response.json.return_value = {"results": [
+        {"name": "Narnia", "country_code": "MX", "feature_code": "PPL"},
+    ]}
+    mock_response.raise_for_status = MagicMock()
+
+    with patch("app.services.requests.get", return_value=mock_response):
+        assert get_country_code("Narnia") is None
 
 def test_get_forecast_success():
     mock_response = MagicMock()

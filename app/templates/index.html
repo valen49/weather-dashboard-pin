@@ -62,6 +62,7 @@
             font-size: 1rem;
         }
         button:hover { background-color: #2c5282; }
+        .country-input { flex: 0 1 240px; }
         .weather-card {
             background: white;
             border-radius: 12px;
@@ -180,6 +181,10 @@
 
             .search-form input {
                 width: 100%;
+            }
+
+            .search-form .country-input {
+                flex: 1;
             }
 
             .weather-card {
@@ -360,6 +365,14 @@
             value="{{ city }}"
             data-testid="city-input"
         >
+        <input
+            type="text"
+            name="country"
+            class="country-input"
+            placeholder="Country (optional)"
+            value="{{ country }}"
+            data-testid="country-input"
+        >
         {% if compare %}
         <input type="hidden" name="compare" value="{{ compare }}">
         {% endif %}
@@ -411,7 +424,7 @@
             <button class="toggle-btn" data-testid="toggle-unit" onclick="toggleUnit()">
                 Switch to °F
             </button>
-            <a href="/?city={{ city }}">
+            <a href="/?city={{ city|urlencode }}&country={{ country|urlencode }}">
                 <button class="compare-btn" type="button">✕ Remove comparison</button>
             </a>
         </div>
@@ -466,6 +479,7 @@
         <div id="compare-form" class="compare-form" style="display: none;">
             <form class="search-form" method="GET" action="/" style="width: 100%;">
                 <input type="hidden" name="city" value="{{ city }}">
+                <input type="hidden" name="country" value="{{ country }}">
                 <input
                     type="text"
                     name="compare"
@@ -477,6 +491,10 @@
         </div>
         {% endif %}
 
+        {% elif weather.country_not_found %}
+        <p class="error" data-testid="country-not-found-message">
+            Country not found. Please check the name or use a 2-letter code (e.g. AR, GB).
+        </p>
         {% elif weather.not_found %}
         <p class="error" data-testid="not-found-message">
             City not found. Please try a different name.

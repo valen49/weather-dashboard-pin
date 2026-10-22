@@ -36,6 +36,9 @@ Proyecto 1. El original sigue intacto como estaba.
 ## ✨ Features
 
 - 🔍 **Búsqueda por ciudad**: clima en tiempo real por nombre de ciudad
+- 🌍 **Filtro por país** (opcional): desambigua ciudades con el mismo nombre (Londres, Reino Unido vs.
+  Londres, Argentina). Acepta el nombre en español o el código de 2 letras (`GB`, `AR`)
+- 🌙 **Modo nocturno**: se recuerda entre visitas y respeta la preferencia del sistema operativo
 - 🌡️ **Condiciones actuales**: temperatura, velocidad del viento y estado del clima
 - 📅 **Pronóstico a 7 días**: predicción extendida
 - 🔄 **Toggle de unidad**: cambiar entre Celsius y Fahrenheit
