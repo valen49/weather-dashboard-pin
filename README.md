@@ -175,10 +175,10 @@ Workflow en [`.github/workflows/ci.yml`](.github/workflows/ci.yml), con 4 jobs e
 El proyecto cubre las dos modalidades de despliegue que plantea la consigna, cada una con su propio
 módulo de Terraform:
 
-| Modalidad | Carpeta | Dónde corre | Cómo se despliega |
-|---|---|---|---|
-| **Nube** | [`terraform/`](terraform/) | EC2 en AWS | Automático: cada push a `main` despliega vía GitHub Actions |
-| **Local** | [`terraform-local/`](terraform-local/) | VM Ubuntu en VirtualBox | Manual: `terraform apply` en la máquina local |
+| Modalidad | Carpeta | Dónde corre | Infraestructura | Deploy de la app |
+|---|---|---|---|---|
+| **Nube** | [`terraform/`](terraform/) | EC2 en AWS | `terraform apply`, una vez | Automático: cada push a `main`, GitHub Actions despliega por SSH |
+| **Local** | [`terraform-local/`](terraform-local/) | VM Ubuntu en VirtualBox | `terraform apply` | Manual: el mismo `terraform apply` despliega la app |
 
 Las dos levantan lo mismo: la imagen publicada en GHCR más el stack de Prometheus + Grafana.
 
