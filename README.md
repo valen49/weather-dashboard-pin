@@ -1,7 +1,8 @@
 # 🌤️ Weather Dashboard — PIN
 
 Proyecto Integrador Final (PIN) del curso **DevOps** de **mundosE** (UNC/FCEFyN) —
-**Proyecto 1: CI/CD con GitHub Actions + Terraform + Docker**.
+**Proyecto 1: CI/CD con GitHub Actions + Terraform + Docker**. Grupo 10 — trabajo individual de
+Valentín Vidal.
 
 Dashboard de clima en Flask que consume la API pública y gratuita de [Open-Meteo](https://open-meteo.com/)
 para mostrar el clima actual y el pronóstico de 7 días de cualquier ciudad del mundo. La aplicación en sí
@@ -21,7 +22,7 @@ En el camino llegué a correr un Jenkins self-hosted en una mini PC propia, desp
 Kubernetes local — una forma de practicar un pipeline completo sin depender de servicios en la nube. Esa
 etapa quedó documentada en el historial de commits del repo original.
 
-Cuando llegó el momento del PIN y tocó elegir uno de los 4 proyectos posibles, elegimos el **Proyecto 1**
+Cuando llegó el momento del PIN y tocó elegir uno de los 4 proyectos posibles, elegí el **Proyecto 1**
 (GitHub Actions + Terraform + Docker, con despliegue en AWS). Le había agarrado cariño al
 `weather-dashboard` original —no quería tocarlo ni perder ese historial—, así que en vez de modificarlo
 in situ, lo **cloné completo** (con todos los commits) a este repo, `weather-dashboard-pin`, y acá es
@@ -84,7 +85,7 @@ Proyecto 1. El original sigue intacto como estaba.
 
 | Categoría | Herramienta | Uso |
 |---|---|---|
-| **CI/CD** | GitHub Actions | `unit-tests` → `security` → `e2e-tests` → `build-and-deploy` |
+| **CI/CD** | GitHub Actions | `unit-tests` y `security` en paralelo → `e2e-tests` → `build-and-deploy` |
 | **IaC** | Terraform | EC2 + Security Group en AWS, backend remoto en S3 + DynamoDB |
 | **Contenedores** | Docker | Imagen de la app, publicada en GHCR |
 | **Seguridad** | Snyk + SonarQube Cloud | Vulnerabilidades de dependencias + análisis estático de código |
