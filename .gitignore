@@ -41,3 +41,8 @@ terraform-local/monitoring.tar.gz
 
 # Armado local del .zip de entrega (no es parte del repo)
 entrega-pin/
+
+# Reportes de cobertura
+coverage.xml
+.coverage
+htmlcov/
