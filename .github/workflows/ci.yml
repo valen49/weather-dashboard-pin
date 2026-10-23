@@ -163,7 +163,17 @@ jobs:
           path: sbom.cyclonedx.json
           retention-days: 30
 
+      # La EC2 es efímera: cuando está destruida, la variable DEPLOY_ENABLED del repo se pone en
+      # "false" y estos pasos se saltean, para que main no quede en rojo por un deploy imposible.
+      - name: Aviso - deploy desactivado
+        if: vars.DEPLOY_ENABLED != 'true'
+        run: |
+          echo "::notice::Deploy salteado: la variable DEPLOY_ENABLED no está en 'true' (infra apagada). Imagen y SBOM publicados igual."
+          echo "### Deploy salteado" >> "$GITHUB_STEP_SUMMARY"
+          echo "La infraestructura está apagada (\`DEPLOY_ENABLED != true\`). La imagen y el SBOM se publicaron igual." >> "$GITHUB_STEP_SUMMARY"
+
       - name: Desplegar en EC2
+        if: vars.DEPLOY_ENABLED == 'true'
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -186,6 +196,7 @@ jobs:
             exit 1
 
       - name: Copiar stack de monitoring a la EC2
+        if: vars.DEPLOY_ENABLED == 'true'
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -196,6 +207,7 @@ jobs:
           strip_components: 1
 
       - name: Desplegar stack de monitoring (Prometheus + Grafana)
+        if: vars.DEPLOY_ENABLED == 'true'
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
