@@ -168,6 +168,9 @@ Workflow en [`.github/workflows/ci.yml`](.github/workflows/ci.yml), con 4 jobs e
    - generación del **SBOM** en formato CycloneDX (subido como artifact del workflow)
    - deploy por SSH a la EC2: `docker pull` + `docker run` de la imagen nueva, con health check contra `/health`
    - copia del stack de `monitoring/` a la EC2 y `docker compose up -d` para levantar Prometheus + Grafana
+   - los tres pasos de deploy corren solo si la variable del repo `DEPLOY_ENABLED` está en `true`. Como la
+     EC2 es efímera, cuando está destruida se pone en `false`: el pipeline sigue publicando la imagen y el
+     SBOM, se saltea el deploy y lo avisa en el resumen del run
 
 ![Pipeline completo en verde](docs/screenshots/github-actions.png)
 
